@@ -1,11 +1,12 @@
 package com.sunquakes.resizer;
 
-import com.sunquakes.resizer.Image;
+import com.sunquakes.resizer.web.ResourceWebServer;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Base64;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -105,6 +106,36 @@ public class ImageTest {
             Image.scaleRange(path, 1 * 1024, 2 * 1024);
         } catch (IOException e) {
             assertThat(e.getMessage(), is("./image.jpg"));
+        }
+    }
+
+    @Test
+    public void scaleRangeUrl() {
+        RWSThread rwsThread = new RWSThread();
+        rwsThread.start();
+
+        try {
+            byte[] image = Image.scaleRange(new URL("http://localhost:3200/image.jpg"), 1 * 1024, 2 * 1024);
+            String imageBase64Test = Base64.getEncoder().encodeToString(image);
+            assertEquals(imageBase64Test, zoomImageBase64);
+            assertTrue(image.length >= 1 * 1024);
+            assertTrue(image.length <= 2 * 1024);
+        } catch (IOException e) {
+            assertTrue(false);
+            e.printStackTrace();
+        }
+    }
+}
+
+// 3707602317
+class RWSThread extends Thread {
+    @Override
+    public void run() {
+        ResourceWebServer server = new ResourceWebServer();
+        try {
+            server.startServer();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

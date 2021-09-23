@@ -3,6 +3,8 @@ package com.sunquakes.resizer;
 import net.coobird.thumbnailator.Thumbnails;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * Image
@@ -112,10 +114,25 @@ public class Image {
         ByteArrayOutputStream bos = new ByteArrayOutputStream((int) sourceFile.length());
         BufferedInputStream in = null;
         in = new BufferedInputStream(new FileInputStream(sourceFile));
-        int buf_size = 1024;
-        byte[] buffer = new byte[buf_size];
+        int bufSize = 1024;
+        byte[] buffer = new byte[bufSize];
         int len = 0;
-        while (-1 != (len = in.read(buffer, 0, buf_size))) {
+        while (-1 != (len = in.read(buffer, 0, bufSize))) {
+            bos.write(buffer, 0, len);
+        }
+        return scaleRange(bos.toByteArray(), minSize, maxSize);
+    }
+
+    public static byte[] scaleRange(URL url, long minSize, long maxSize) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setConnectTimeout(5 * 1000);
+        InputStream in = conn.getInputStream();//通过输入流获取图片数据
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        int bufSize = 1024;
+        byte[] buffer = new byte[bufSize];
+        int len = 0;
+        while (-1 != (len = in.read(buffer, 0, bufSize))) {
             bos.write(buffer, 0, len);
         }
         return scaleRange(bos.toByteArray(), minSize, maxSize);
