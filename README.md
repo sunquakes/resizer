@@ -6,13 +6,13 @@
 <dependency>
     <groupId>com.sunquakes</groupId>
     <artifactId>resizer</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.1</version>
 </dependency>
 ```
 - gradle
 ```
 // https://mvnrepository.com/artifact/com.sunquakes/resizer
-compile group: 'com.sunquakes', name: 'resizer', version: '0.2.0'
+compile group: 'com.sunquakes', name: 'resizer', version: '0.3.1'
 ```
 ## Getting started
 ### Import Package
@@ -29,4 +29,9 @@ byte[] outImageByteArray = Image.scaleRange(inImageByteArray, 100 * 1024, 200 * 
 ```java
 String inImagePathname = "/path/to/image";
 byte[] outImageByteArray = Image.scaleRange(inImagePathname, 100 * 1024, 200 * 1024); // Adjust the image size to 100kb ~ 200KB
+```
+- From url
+```java
+String inImageUrl = "http://path.to.image";
+byte[] outImageByteArray = Image.scaleRange(new URL(inImageUrl), 100 * 1024, 200 * 1024); // Adjust the image size to 100kb ~ 200KB
 ```

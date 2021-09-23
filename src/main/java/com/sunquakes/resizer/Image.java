@@ -123,6 +123,14 @@ public class Image {
         return scaleRange(bos.toByteArray(), minSize, maxSize);
     }
 
+    /**
+     * scaleRange
+     * @param url Source image url
+     * @param minSize  Minimum value after conversion
+     * @param maxSize  Maximum value after conversion
+     * @return Output image bytes
+     * @throws IOException Throw exception
+     */
     public static byte[] scaleRange(URL url, long minSize, long maxSize) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
